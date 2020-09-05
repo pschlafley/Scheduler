@@ -1,35 +1,53 @@
-// when browser is open current day is displayed at the top of the calendar
-// console.log(m.format("dddd MMMM, Do h:mm:ss a"));
-
-// console.log(now.format("dddd MMMM, Mo h:mm:ss a"));
-
-// var currentDay = $("#currentDay");
-
-// function updateTime () {
-//       var now = moment();
-
-//       var display = now.format("h:mm:ss a");
-
-//       currentDay.textContent = display;
-// };
-
-// setInterval(updateTime, 1000);
-
-// updateTime();
-
+var tasks = $(".selected-hour")
 var currentDay = $("#currentDay");
+var currentTimer = $("#timer");
 
-
-var updateTime = function() {
-  var now = moment();
-
-  var display = now.format("dddd, MMMM, Mo h:mm:ss a");
+var hourColor = function() {
+  var currentHour = (moment().hour());
   
-  currentDay.text(display);
+  for (var i = 0; i < tasks.length; i++) {
+    var task = $(tasks[i])
+    var blockHour = task.data("hour");
+
+    if (blockHour < currentHour) {
+      task
+      .addClass("past")
+    } 
+    else if (blockHour === currentHour) {
+      task
+      .addClass("present")
+    }
+    else {
+      task
+      .addClass("future")
+    }
+  }
 };
 
-setInterval(updateTime, 1000)
+// function that gets the <p>'s id and puts the date as the content
+var updateTime = function() {
+  // set time = the current time
+  var timeNow = moment();
+  // format the time to show the month, day year
+  var displayTime = timeNow.format("LL");
+  // set text content of the <p> equal to the time
+  currentDay.text(displayTime);
+};
+
+// function that show a running clock of the current time of day on a new line
+var clock = function() {
+  var timeNow = moment();
+
+  var clockDisplay = timeNow.format("LTS");
+
+  currentTimer.text(clockDisplay);
+};
+
+
+setInterval(updateTime, 1000);
 updateTime();
 
-console.log(updateTime)
+setInterval(clock, 1000);
+clock();
 
+hourColor();
