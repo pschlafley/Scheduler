@@ -1,6 +1,9 @@
-var tasks = $(".selected-hour")
+var tasks = $(".selected-hour");
+var saveBtn = $(".saveBtn");
 var currentDay = $("#currentDay");
 var currentTimer = $("#timer");
+
+var hourArr = ["9", "10", "11", "12", "13", "14", "15", "16", "17"]
 
 var hourColor = function() {
   var currentHour = (moment().hour());
@@ -24,8 +27,12 @@ var hourColor = function() {
   }
 };
 
+hourColor();
+
+
+
 // function that gets the <p>'s id and puts the date as the content
-var updateTime = function() {
+  var updateTime = function() {
   // set time = the current time
   var timeNow = moment();
   // format the time to show the month, day year
@@ -33,8 +40,11 @@ var updateTime = function() {
   // set text content of the <p> equal to the time
   currentDay.text(displayTime);
 };
+updateTime();
 
-// function that show a running clock of the current time of day on a new line
+
+
+// function that shows a running clock of the current time of day on a new line
 var clock = function() {
   var timeNow = moment();
 
@@ -43,11 +53,27 @@ var clock = function() {
   currentTimer.text(clockDisplay);
 };
 
-
-setInterval(updateTime, 1000);
-updateTime();
-
 setInterval(clock, 1000);
 clock();
 
-hourColor();
+
+
+$(".saveBtn").click(function(event) {
+  var target = event.currentTarget.previousElementSibling.id;
+  var userInput = $("#" + target).val().trim();
+  localStorage.setItem(target, JSON.stringify(userInput));
+  console.log(localStorage);
+});
+
+function onLoad() {
+  for (var i = 0; i < hourArr.length; i++) {
+    var hour = hourArr[i];
+    var value = JSON.parse(localStorage.getItem("text-area-" + hour));
+    $("#text-area-" + hour).val(value);
+  }
+};
+
+onLoad();
+
+
+
